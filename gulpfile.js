@@ -111,6 +111,7 @@ gulp.task('docs-ts', gulp.series('docs-ts-raw', function () {
     .pipe($.replace('module:json-refs~', ''))
     .pipe($.replace('module:json-refs.', ''))
     .pipe($.replace('Promise.<', 'Promise<'))
+    .pipe($.replace('declare module \'json-refs\'', 'declare module \'@rkesters/json-refs\''))
     .pipe(gulp.dest('.'));
 }));
 
