@@ -7,3 +7,6 @@ coverage/
 .vscode/
 jsconfig.json
 *.iml
+.coverage
+.nyc_output
+dist/

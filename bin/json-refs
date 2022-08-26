@@ -29,16 +29,11 @@
 // Set here so that commander does the right thing
 process.stdout.columns = 120;
 
-var JsonRefs = require('..');
+var JsonRefs = require('../dist/index');
 var program = require('commander');
 var pkg = require('../package.json');
 var YAML = require('js-yaml');
 
-// Load promises polyfill if necessary
-/* istanbul ignore if */
-if (typeof Promise === 'undefined') {
-  require('native-promise-only');
-}
 
 function exitWithError (err) {
   console.error();

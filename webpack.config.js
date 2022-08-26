@@ -4,22 +4,14 @@ var path = require('path');
 
 module.exports = [{
   devtool: 'inline-source-map',
-  entry: './index.js',
+  entry: './src/index.ts',
   mode: 'development',
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['@babel/env', {
-                targets: 'cover 100%'
-              }]
-            ]
-          }
-        }
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       }
     ]
   },
@@ -33,22 +25,14 @@ module.exports = [{
     library: 'JsonRefs'
   }
 }, {
-  entry: './index.js',
+  entry: './src/index.ts',
   mode: 'production',
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['@babel/env', {
-                targets: 'cover 100%'
-              }]
-            ]
-          }
-        }
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       }
     ]
   },
