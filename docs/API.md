@@ -16,17 +16,17 @@ JSON Pointers *(https://tools.ietf.org/html/rfc6901)*.
     * [.RetrievedResolvedRefsResults](#module_json-refs.RetrievedResolvedRefsResults) : <code>object</code>
     * [.UnresolvedRefDetails](#module_json-refs.UnresolvedRefDetails) : <code>object</code>
     * [.clearCache()](#module_json-refs.clearCache)
-    * [.decodePath(path)](#module_json-refs.decodePath) ⇒ <code>Array.&lt;string&gt;</code>
-    * [.encodePath(path)](#module_json-refs.encodePath) ⇒ <code>Array.&lt;string&gt;</code>
-    * [.findRefs(obj, [options])](#module_json-refs.findRefs) ⇒ <code>Object.&lt;string, ([UnresolvedRefDetails](#module_json-refs.UnresolvedRefDetails)\|undefined)&gt;</code>
-    * [.findRefsAt(location, [options])](#module_json-refs.findRefsAt) ⇒ <code>[Promise.&lt;RetrievedRefsResults&gt;](#module_json-refs.RetrievedRefsResults)</code>
+    * [.decodePath(path)](#module_json-refs.decodePath) ⇒ <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code>
+    * [.encodePath(path)](#module_json-refs.encodePath) ⇒ <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code>
+    * [.findRefs(obj, [options])](#module_json-refs.findRefs) ⇒ <code>[ &#x27;Object&#x27; ].&lt;string, ([UnresolvedRefDetails](#module_json-refs.UnresolvedRefDetails)\|undefined)&gt;</code>
+    * [.findRefsAt(location, [options])](#module_json-refs.findRefsAt) ⇒ <code>[[ &#x27;Promise&#x27; ].&lt;RetrievedRefsResults&gt;](#module_json-refs.RetrievedRefsResults)</code>
     * [.getRefDetails(obj)](#module_json-refs.getRefDetails) ⇒ <code>[UnresolvedRefDetails](#module_json-refs.UnresolvedRefDetails)</code>
     * [.isPtr(ptr, [throwWithDetails])](#module_json-refs.isPtr) ⇒ <code>boolean</code>
     * [.isRef(obj, [throwWithDetails])](#module_json-refs.isRef) ⇒ <code>boolean</code>
-    * [.pathFromPtr(ptr)](#module_json-refs.pathFromPtr) ⇒ <code>Array.&lt;string&gt;</code>
+    * [.pathFromPtr(ptr)](#module_json-refs.pathFromPtr) ⇒ <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code>
     * [.pathToPtr(path, [hashPrefix])](#module_json-refs.pathToPtr) ⇒ <code>string</code>
-    * [.resolveRefs(obj, [options])](#module_json-refs.resolveRefs) ⇒ <code>[Promise.&lt;ResolvedRefsResults&gt;](#module_json-refs.ResolvedRefsResults)</code>
-    * [.resolveRefsAt(location, [options])](#module_json-refs.resolveRefsAt) ⇒ <code>[Promise.&lt;RetrievedResolvedRefsResults&gt;](#module_json-refs.RetrievedResolvedRefsResults)</code>
+    * [.resolveRefs(obj, [options])](#module_json-refs.resolveRefs) ⇒ <code>[[ &#x27;Promise&#x27; ].&lt;ResolvedRefsResults&gt;](#module_json-refs.ResolvedRefsResults)</code>
+    * [.resolveRefsAt(location, [options])](#module_json-refs.resolveRefsAt) ⇒ <code>[[ &#x27;Promise&#x27; ].&lt;RetrievedResolvedRefsResults&gt;](#module_json-refs.RetrievedResolvedRefsResults)</code>
 
 <a name="module_json-refs.JsonRefsOptions"></a>
 
@@ -58,7 +58,7 @@ Simple function used to filter out JSON References.
 | Param | Type | Description |
 | --- | --- | --- |
 | refDetails | <code>[UnresolvedRefDetails](#module_json-refs.UnresolvedRefDetails)</code> | The JSON Reference details to test |
-| path | <code>Array.&lt;string&gt;</code> | The path to the JSON Reference |
+| path | <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code> | The path to the JSON Reference |
 
 <a name="module_json-refs.RefPostProcessor"></a>
 
@@ -71,7 +71,7 @@ Simple function used to post-process a JSON Reference details.
 | Param | Type | Description |
 | --- | --- | --- |
 | refDetails | <code>[UnresolvedRefDetails](#module_json-refs.UnresolvedRefDetails)</code> | The JSON Reference details to test |
-| path | <code>Array.&lt;string&gt;</code> | The path to the JSON Reference |
+| path | <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code> | The path to the JSON Reference |
 
 <a name="module_json-refs.RefPreProcessor"></a>
 
@@ -84,7 +84,7 @@ Simple function used to pre-process a JSON Reference like object.
 | Param | Type | Description |
 | --- | --- | --- |
 | obj | <code>object</code> | The JSON Reference like object |
-| path | <code>Array.&lt;string&gt;</code> | The path to the JSON Reference like object |
+| path | <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code> | The path to the JSON Reference like object |
 
 <a name="module_json-refs.ResolvedRefDetails"></a>
 
@@ -166,11 +166,11 @@ Clears the internal cache of remote documents, reference details, etc.
 **Kind**: static method of <code>[json-refs](#module_json-refs)</code>  
 <a name="module_json-refs.decodePath"></a>
 
-### json-refs.decodePath(path) ⇒ <code>Array.&lt;string&gt;</code>
+### json-refs.decodePath(path) ⇒ <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code>
 Takes an array of path segments and decodes the JSON Pointer tokens in them.
 
 **Kind**: static method of <code>[json-refs](#module_json-refs)</code>  
-**Returns**: <code>Array.&lt;string&gt;</code> - the array of path segments with their JSON Pointer tokens decoded  
+**Returns**: <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code> - the array of path segments with their JSON Pointer tokens decoded  
 **Throws**:
 
 - <code>Error</code> if the path is not an `Array`
@@ -179,15 +179,15 @@ Takes an array of path segments and decodes the JSON Pointer tokens in them.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| path | <code>Array.&lt;string&gt;</code> | The array of path segments |
+| path | <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code> | The array of path segments |
 
 <a name="module_json-refs.encodePath"></a>
 
-### json-refs.encodePath(path) ⇒ <code>Array.&lt;string&gt;</code>
+### json-refs.encodePath(path) ⇒ <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code>
 Takes an array of path segments and encodes the special JSON Pointer characters in them.
 
 **Kind**: static method of <code>[json-refs](#module_json-refs)</code>  
-**Returns**: <code>Array.&lt;string&gt;</code> - the array of path segments with their JSON Pointer tokens encoded  
+**Returns**: <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code> - the array of path segments with their JSON Pointer tokens encoded  
 **Throws**:
 
 - <code>Error</code> if the path is not an `Array`
@@ -196,15 +196,15 @@ Takes an array of path segments and encodes the special JSON Pointer characters 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| path | <code>Array.&lt;string&gt;</code> | The array of path segments |
+| path | <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code> | The array of path segments |
 
 <a name="module_json-refs.findRefs"></a>
 
-### json-refs.findRefs(obj, [options]) ⇒ <code>Object.&lt;string, ([UnresolvedRefDetails](#module_json-refs.UnresolvedRefDetails)\|undefined)&gt;</code>
+### json-refs.findRefs(obj, [options]) ⇒ <code>[ &#x27;Object&#x27; ].&lt;string, ([UnresolvedRefDetails](#module_json-refs.UnresolvedRefDetails)\|undefined)&gt;</code>
 Finds JSON References defined within the provided array/object.
 
 **Kind**: static method of <code>[json-refs](#module_json-refs)</code>  
-**Returns**: <code>Object.&lt;string, ([UnresolvedRefDetails](#module_json-refs.UnresolvedRefDetails)\|undefined)&gt;</code> - an object whose keys are JSON Pointers
+**Returns**: <code>[ &#x27;Object&#x27; ].&lt;string, ([UnresolvedRefDetails](#module_json-refs.UnresolvedRefDetails)\|undefined)&gt;</code> - an object whose keys are JSON Pointers
 *(fragment version)* to where the JSON Reference is defined and whose values are [UnresolvedRefDetails](UnresolvedRefDetails).  
 **Throws**:
 
@@ -227,14 +227,14 @@ var invalidRefs = JsonRefs.findRefs(obj, {filter: 'invalid', includeInvalid: tru
 ```
 <a name="module_json-refs.findRefsAt"></a>
 
-### json-refs.findRefsAt(location, [options]) ⇒ <code>[Promise.&lt;RetrievedRefsResults&gt;](#module_json-refs.RetrievedRefsResults)</code>
+### json-refs.findRefsAt(location, [options]) ⇒ <code>[[ &#x27;Promise&#x27; ].&lt;RetrievedRefsResults&gt;](#module_json-refs.RetrievedRefsResults)</code>
 Finds JSON References defined within the document at the provided location.
 
 This API is identical to [findRefs](findRefs) except this API will retrieve a remote document and then
 return the result of [findRefs](findRefs) on the retrieved document.
 
 **Kind**: static method of <code>[json-refs](#module_json-refs)</code>  
-**Returns**: <code>[Promise.&lt;RetrievedRefsResults&gt;](#module_json-refs.RetrievedRefsResults)</code> - a promise that resolves a
+**Returns**: <code>[[ &#x27;Promise&#x27; ].&lt;RetrievedRefsResults&gt;](#module_json-refs.RetrievedRefsResults)</code> - a promise that resolves a
 [RetrievedRefsResults](#module_json-refs.RetrievedRefsResults) and rejects with an `Error` when the input arguments fail validation,
 when `options.subDocPath` points to an invalid location or when the location argument points to an unloadable
 resource  
@@ -349,11 +349,11 @@ if (isRef(obj)) {
 ```
 <a name="module_json-refs.pathFromPtr"></a>
 
-### json-refs.pathFromPtr(ptr) ⇒ <code>Array.&lt;string&gt;</code>
+### json-refs.pathFromPtr(ptr) ⇒ <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code>
 Returns an array of path segments for the provided JSON Pointer.
 
 **Kind**: static method of <code>[json-refs](#module_json-refs)</code>  
-**Returns**: <code>Array.&lt;string&gt;</code> - the path segments  
+**Returns**: <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code> - the path segments  
 **Throws**:
 
 - <code>Error</code> if the provided `ptr` argument is not a JSON Pointer
@@ -379,16 +379,16 @@ Returns a JSON Pointer for the provided array of path segments.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| path | <code>Array.&lt;string&gt;</code> |  | The array of path segments |
+| path | <code>[ &#x27;Array&#x27; ].&lt;string&gt;</code> |  | The array of path segments |
 | [hashPrefix] | <code>boolean</code> | <code>true</code> | Whether or not create a hash-prefixed JSON Pointer |
 
 <a name="module_json-refs.resolveRefs"></a>
 
-### json-refs.resolveRefs(obj, [options]) ⇒ <code>[Promise.&lt;ResolvedRefsResults&gt;](#module_json-refs.ResolvedRefsResults)</code>
+### json-refs.resolveRefs(obj, [options]) ⇒ <code>[[ &#x27;Promise&#x27; ].&lt;ResolvedRefsResults&gt;](#module_json-refs.ResolvedRefsResults)</code>
 Finds JSON References defined within the provided array/object and resolves them.
 
 **Kind**: static method of <code>[json-refs](#module_json-refs)</code>  
-**Returns**: <code>[Promise.&lt;ResolvedRefsResults&gt;](#module_json-refs.ResolvedRefsResults)</code> - a promise that resolves a
+**Returns**: <code>[[ &#x27;Promise&#x27; ].&lt;ResolvedRefsResults&gt;](#module_json-refs.ResolvedRefsResults)</code> - a promise that resolves a
 [ResolvedRefsResults](#module_json-refs.ResolvedRefsResults) and rejects with an `Error` when the input arguments fail validation,
 when `options.subDocPath` points to an invalid location or when the location argument points to an unloadable
 resource  
@@ -415,14 +415,14 @@ JsonRefs.resolveRefs(swaggerObj, {
 ```
 <a name="module_json-refs.resolveRefsAt"></a>
 
-### json-refs.resolveRefsAt(location, [options]) ⇒ <code>[Promise.&lt;RetrievedResolvedRefsResults&gt;](#module_json-refs.RetrievedResolvedRefsResults)</code>
+### json-refs.resolveRefsAt(location, [options]) ⇒ <code>[[ &#x27;Promise&#x27; ].&lt;RetrievedResolvedRefsResults&gt;](#module_json-refs.RetrievedResolvedRefsResults)</code>
 Resolves JSON References defined within the document at the provided location.
 
 This API is identical to [resolveRefs](#module_json-refs.resolveRefs) except this API will retrieve a remote document and
 then return the result of [resolveRefs](#module_json-refs.resolveRefs) on the retrieved document.
 
 **Kind**: static method of <code>[json-refs](#module_json-refs)</code>  
-**Returns**: <code>[Promise.&lt;RetrievedResolvedRefsResults&gt;](#module_json-refs.RetrievedResolvedRefsResults)</code> - a promise that resolves a
+**Returns**: <code>[[ &#x27;Promise&#x27; ].&lt;RetrievedResolvedRefsResults&gt;](#module_json-refs.RetrievedResolvedRefsResults)</code> - a promise that resolves a
 [RetrievedResolvedRefsResults](#module_json-refs.RetrievedResolvedRefsResults) and rejects with an `Error` when the input arguments fail
 validation, when `options.subDocPath` points to an invalid location or when the location argument points to an
 unloadable resource  
