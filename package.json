@@ -1,5 +1,5 @@
 {
-  "name": "json-refs",
+  "name": "@rkesters/json-refs",
   "version": "3.0.15",
   "description": "Various utilities for JSON References (http://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03).",
   "main": "index.js",
@@ -12,7 +12,10 @@
     "email": "jwhitlock@apache.org",
     "url": "https://github.com/whitlockjc"
   },
-  "contributors": [],
+  "contributors": [{
+    "name" : "Robert Kesterson",
+    "email" : "rkesters@gmail.com"
+  }],
   "engines": {
     "node": ">=0.8"
   },
