@@ -1,8 +1,9 @@
 {
-  "name": "json-refs",
+  "name": "@rkesters/json-refs",
   "version": "3.0.15",
   "description": "Various utilities for JSON References (http://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03).",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "prepare": "husky install",
     "prebuild": "npm run clean && npx tsc --build --clean",
@@ -42,7 +43,6 @@
     "bin",
     "dist"
   ],
-  "types": "./dist/index.d.ts",
   "homepage": "https://github.com/whitlockjc/json-refs",
   "license": "MIT",
   "repository": {
