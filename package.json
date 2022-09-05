@@ -128,12 +128,12 @@
     "webpack": "^5.74.0"
   },
   "dependencies": {
+    "@rkesters/path-loader": "2.0.2",
     "bluebird": "^3.7.2",
     "commander": "~9.4.0",
     "graphlib": "^2.1.8",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "path-loader": "latest",
     "uri-js": "^4.4.1"
   }
 }

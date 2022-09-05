@@ -14,10 +14,10 @@ import {
 } from 'lodash';
 import * as gl from 'graphlib';
 import path from 'path';
-import * as PathLoader from 'path-loader';
+import * as PathLoader from '@rkesters/path-loader';
 import * as qs from 'querystring';
 import slash from './slash';
-import {URIComponents} from 'uri-js';
+import { URIComponents } from 'uri-js';
 import * as URI from 'uri-js';
 import {
     GeneralDocument,
@@ -33,7 +33,7 @@ import {
     RetrievedResolvedRefsResults,
     UnresolvedRefDetails,
 } from './typedefs';
-import {LoadOptions} from 'path-loader';
+import { LoadOptions, Response } from '@rkesters/path-loader';
 
 const badPtrTokenRegex = /~(?:[^01]|$)/g;
 let remoteCache: Record<string, { error?: Error; value?: GeneralDocument; refs?: Record<string, RefDetails> }> = {};
@@ -43,10 +43,10 @@ const uriDetailsCache: Record<string, URIComponents> = {};
 
 /* Internal Functions */
 
-function combineQueryParams (qs1, qs2) {
+function combineQueryParams(qs1, qs2) {
     const combined = {};
 
-    function mergeQueryParams (obj) {
+    function mergeQueryParams(obj) {
         forOwn(obj, function (val, key) {
             combined[key] = val;
         });
@@ -58,7 +58,7 @@ function combineQueryParams (qs1, qs2) {
     return Object.keys(combined).length === 0 ? undefined : qs.stringify(combined);
 }
 
-function combineURIs (u1, u2) {
+function combineURIs(u1, u2) {
     // Convert Windows paths
     if (isString(u1)) {
         u1 = slash(u1);
@@ -102,7 +102,7 @@ function combineURIs (u1, u2) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function findAncestors (obj: string[] | Record<string, any>, path: string[]) {
+function findAncestors(obj: string[] | Record<string, any>, path: string[]) {
     const ancestors = [];
     let node;
 
@@ -121,15 +121,15 @@ function findAncestors (obj: string[] | Record<string, any>, path: string[]) {
     return ancestors;
 }
 
-function isRemote (refDetails: ResolvedRefDetails) {
+function isRemote(refDetails: ResolvedRefDetails) {
     return remoteTypes.indexOf(getRefType(refDetails.uriDetails)) > -1;
 }
 
-function isValid (refDetails) {
+function isValid(refDetails) {
     return isUndefined(refDetails.error) && refDetails.type !== 'invalid';
 }
 
-function findValue (obj: GeneralDocument, path: string[]) {
+function findValue(obj: GeneralDocument, path: string[]) {
     let value = obj;
 
     // Using this manual approach instead of get since we have to decodeURI the segments
@@ -145,13 +145,13 @@ function findValue (obj: GeneralDocument, path: string[]) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getExtraRefKeys (ref: Record<string, any>): string[] {
+function getExtraRefKeys(ref: Record<string, any>): string[] {
     return Object.keys(ref).filter(function (key) {
         return key !== '$ref';
     });
 }
 
-function getRefType (uriDetails: URIComponents): RefType {
+function getRefType(uriDetails: URIComponents): RefType {
     // Convert the URI reference to one of our types
     switch (uriDetails.reference) {
         case 'absolute':
@@ -164,7 +164,7 @@ function getRefType (uriDetails: URIComponents): RefType {
     }
 }
 
-async function getRemoteDocument (url: string, options: JsonRefsOptionsValidated): Promise<GeneralDocument> {
+async function getRemoteDocument(url: string, options: JsonRefsOptionsValidated): Promise<GeneralDocument> {
     const loaderOptions: LoadOptions<GeneralDocument> = cloneDeep(options.loaderOptions ?? {});
 
     const cacheEntry = remoteCache[url];
@@ -178,7 +178,7 @@ async function getRemoteDocument (url: string, options: JsonRefsOptionsValidated
     }
     // If there is no content processor, default to processing the raw response as JSON
     if (isUndefined(loaderOptions.processContent)) {
-        loaderOptions.processContent = function (res, callback) {
+        loaderOptions.processContent = function (res: Response, callback) {
             callback(undefined, JSON.parse(res.text));
         };
     }
@@ -201,7 +201,7 @@ async function getRemoteDocument (url: string, options: JsonRefsOptionsValidated
     }
 }
 
-function valiadteRefLike (obj: unknown) {
+function valiadteRefLike(obj: unknown) {
     if (!isPlainObject(obj)) {
         return 'obj is not an Object';
         // eslint-disable-next-line brace-style
@@ -213,12 +213,12 @@ function valiadteRefLike (obj: unknown) {
     }
 }
 
-function isRefLike (obj: unknown): obj is RefLife {
+function isRefLike(obj: unknown): obj is RefLife {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return isPlainObject(obj) && isString((obj as any).$ref);
 }
 
-function makeAbsolute (location: string): string {
+function makeAbsolute(location: string): string {
     if (location.indexOf('://') === -1 && !path.isAbsolute(location)) {
         return path.resolve(process.cwd(), location);
     } else {
@@ -226,7 +226,7 @@ function makeAbsolute (location: string): string {
     }
 }
 
-function makeRefFilter (options: JsonRefsOptions) {
+function makeRefFilter(options: JsonRefsOptions) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let validTypes = null;
 
@@ -251,7 +251,7 @@ function makeRefFilter (options: JsonRefsOptions) {
     };
 }
 
-function makeSubDocPath (subDocPath: string | string[] | undefined) {
+function makeSubDocPath(subDocPath: string | string[] | undefined) {
     if (isArray(subDocPath)) {
         return subDocPath;
     } else if (isString(subDocPath)) {
@@ -261,17 +261,17 @@ function makeSubDocPath (subDocPath: string | string[] | undefined) {
     }
 }
 
-function markMissing (refDetails: ResolvedRefDetails, err: Error) {
+function markMissing(refDetails: ResolvedRefDetails, err: Error) {
     refDetails.error = err.message;
     refDetails.missing = true;
 }
 
-function parseURI (uri: string): URIComponents {
+function parseURI(uri: string): URIComponents {
     // We decode first to avoid doubly encoding
     return URI.parse(uri);
 }
 
-async function buildRefModel (
+async function buildRefModel(
     document: GeneralDocument,
     options: JsonRefsOptionsValidated,
     metadata: Metadata = {
@@ -407,14 +407,14 @@ async function buildRefModel (
     return metadata;
 }
 
-function setValue (obj: GeneralDocument, refPath: string[], value: GeneralDocument) {
+function setValue(obj: GeneralDocument, refPath: string[], value: GeneralDocument) {
     findValue(obj, refPath.slice(0, refPath.length - 1))[refPath[refPath.length - 1]] = value;
 }
 
-function walk (ancestors, node, path, fn) {
+function walk(ancestors, node, path, fn) {
     let processChildren = true;
 
-    function walkItem (item, segment) {
+    function walkItem(item, segment) {
         path.push(segment);
         walk(ancestors, item, path, fn);
         path.pop();
@@ -445,7 +445,7 @@ function walk (ancestors, node, path, fn) {
     }
 }
 
-function validateOptions (
+function validateOptions(
     options: JsonRefsOptions | undefined,
     obj?: GeneralDocument | string[]
 ): JsonRefsOptionsValidated {
@@ -544,7 +544,7 @@ function validateOptions (
  *
  * @see {@link https://tools.ietf.org/html/rfc6901#section-3}
  */
-export function decodePath (path: string[]) {
+export function decodePath(path: string[]) {
     if (!isArray(path)) {
         throw new TypeError('path must be an array');
     }
@@ -571,7 +571,7 @@ export function decodePath (path: string[]) {
  *
  * @see {@link https://tools.ietf.org/html/rfc6901#section-3}
  */
-export function encodePath (path: string[]) {
+export function encodePath(path: string[]) {
     if (!isArray(path)) {
         throw new TypeError('path must be an array');
     }
@@ -604,7 +604,7 @@ export function encodePath (path: string[]) {
  * // Finding all invalid references
  * var invalidRefs = JsonRefs.findRefs(obj, {filter: 'invalid', includeInvalid: true});
  */
-export function findRefs (obj: string[] | GeneralDocument, opts?: JsonRefsOptions) {
+export function findRefs(obj: string[] | GeneralDocument, opts?: JsonRefsOptions) {
     const refs: Record<string, RefDetails> = {};
 
     // Validate the provided document
@@ -658,7 +658,7 @@ export function findRefs (obj: string[] | GeneralDocument, opts?: JsonRefsOption
     return refs;
 }
 
-export function validatePtr (ptr: unknown): string | undefined {
+export function validatePtr(ptr: unknown): string | undefined {
     if (isString(ptr)) {
         if (!isEmpty(ptr)) {
             const firstChar = ptr[0];
@@ -709,7 +709,7 @@ export function validatePtr (ptr: unknown): string | undefined {
  *   }
  * }
  */
-export function isPtr (ptr: unknown, throwWithDetails = false): ptr is RefPtr {
+export function isPtr(ptr: unknown, throwWithDetails = false): ptr is RefPtr {
     const r: string | undefined = validatePtr(ptr);
 
     if (!r) {
@@ -754,7 +754,7 @@ export function isPtr (ptr: unknown, throwWithDetails = false): ptr is RefPtr {
  *   }
  * }
  */
-export function isRef (obj: unknown): obj is RefDetails {
+export function isRef(obj: unknown): obj is RefDetails {
     return isRefLike(obj) && getRefDetails(obj).type !== 'invalid';
 }
 
@@ -767,7 +767,7 @@ export function isRef (obj: unknown): obj is RefDetails {
  *
  * @throws {Error} if the provided `ptr` argument is not a JSON Pointer
  */
-export function pathFromPtr (ptr: string) {
+export function pathFromPtr(ptr: string) {
     if (!isPtr(ptr)) {
         throw new Error(`ptr must be a JSON Pointer: ${validatePtr(ptr)}`);
     }
@@ -792,7 +792,7 @@ export function pathFromPtr (ptr: string) {
  *
  * @throws {Error} if the `path` argument is not an array
  */
-export function pathToPtr (path: string[], hashPrefix = true) {
+export function pathToPtr(path: string[], hashPrefix = true) {
     if (!isArray(path)) {
         throw new Error('path must be an Array');
     }
@@ -826,7 +826,7 @@ export function pathToPtr (path: string[], hashPrefix = true) {
  *     console.log(err.stack);
  *   });
  */
-export async function resolveRefs (doc, opts?: JsonRefsOptions): Promise<ResolvedRefsResults> {
+export async function resolveRefs(doc, opts?: JsonRefsOptions): Promise<ResolvedRefsResults> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let allTasks: Promise<any> = Promise.resolve();
 
@@ -970,7 +970,7 @@ export async function resolveRefs (doc, opts?: JsonRefsOptions): Promise<Resolve
                 });
             });
 
-            function walkRefs (root, refPtr, refPath) {
+            function walkRefs(root, refPtr, refPath) {
                 const refPtrParts = refPtr.split('#');
                 const refDetails = results.refs[refPtr];
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1135,7 +1135,7 @@ export async function resolveRefs (doc, opts?: JsonRefsOptions): Promise<Resolve
  *     console.log(err.stack);
  *   });
  */
-export async function resolveRefsAt (
+export async function resolveRefsAt(
     location: string,
     opts: JsonRefsOptions = {}
 ): Promise<RetrievedResolvedRefsResults> {
@@ -1160,7 +1160,7 @@ export async function resolveRefsAt (
 }
 
 // splits a fragment from a URI using the first hash found
-export function splitFragment (uri) {
+export function splitFragment(uri) {
     const hash = uri.indexOf('#');
 
     if (hash < 0) {
@@ -1180,7 +1180,7 @@ export function splitFragment (uri) {
  *
  * @returns {module:json-refs.UnresolvedRefDetails} the detailed information
  */
-export function getRefDetails (obj: GeneralDocument): UnresolvedRefDetails {
+export function getRefDetails(obj: GeneralDocument): UnresolvedRefDetails {
     const details: UnresolvedRefDetails = {
         def: obj,
     } as UnresolvedRefDetails;
@@ -1252,7 +1252,7 @@ export function getRefDetails (obj: GeneralDocument): UnresolvedRefDetails {
  *     console.log(err.stack);
  *   });
  */
-export async function findRefsAt (location: string, opts: JsonRefsOptions = {}) {
+export async function findRefsAt(location: string, opts: JsonRefsOptions = {}) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let allTasks: Promise<any> = Promise.resolve();
 
@@ -1297,6 +1297,6 @@ export async function findRefsAt (location: string, opts: JsonRefsOptions = {}) 
 /**
  * Clears the internal cache of remote documents, reference details, etc.
  */
-export function clearCache () {
+export function clearCache() {
     remoteCache = {};
 }

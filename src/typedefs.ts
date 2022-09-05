@@ -143,7 +143,7 @@
 //   location: string,
 //   options?: JsonRefsOptions
 // ): Promise<RetrievedResolvedRefsResults>;
-import { LoadOptions } from 'path-loader';
+import { LoadOptions } from '@rkesters/path-loader';
 import { URIComponents } from 'uri-js';
 
 export interface GeneralDocument {

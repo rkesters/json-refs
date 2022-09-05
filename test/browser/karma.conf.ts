@@ -26,8 +26,8 @@ module.exports = function (config) {
         reporters: ['mocha', 'coverage-istanbul'],
         singleRun: true,
         files: [
-            {pattern: '../test/test-json-refs.ts', watch: false},
-            {pattern: './browser/documents/**/*', watched: false, included: false},
+            { pattern: '../test/test-json-refs.ts', watch: false },
+            { pattern: './browser/documents/**/*', watched: false, included: false },
         ],
         client: {
             mocha: {
@@ -72,10 +72,7 @@ module.exports = function (config) {
                         test: /\.ts$/,
                         exclude: /test/,
                         enforce: 'post',
-                        use: {
-                            loader: 'istanbul-instrumenter-loader',
-                            options: {esModules: true},
-                        },
+                        use: '@jsdevtools/coverage-istanbul-loader,',
                     },
                 ],
             },
@@ -85,7 +82,7 @@ module.exports = function (config) {
                     process: 'process/browser',
                     //   'path-loader': 'path-loader/dist/path-loader.js'
                 },
-                fallback: {fs: false, path: require.resolve('path-browserify')},
+                fallback: { fs: false, path: require.resolve('path-browserify') },
                 // "crypto": false , "buffer": require.resolve("buffer/"), "zlib": false, "tty": false, "stream": false, "domain": false, "querystring": false,"http": false , "https": false ,"path": false, "os": false }
             },
         },
@@ -93,11 +90,17 @@ module.exports = function (config) {
             stats: 'errors-details',
         },
         coverageIstanbulReporter: {
-            reports: ['lcov'],
+            reports: ['lcov', 'text'],
             dir: '.coverage/karma',
             fixWebpackSourcePaths: true,
             'report-config': {
-                html: {outdir: 'html'},
+                html: { outdir: 'html' },
+            },
+            thresholds: {
+                global: {
+                    statements: 80,
+                    lines: 80,
+                },
             },
         },
     });
