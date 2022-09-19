@@ -146,33 +146,19 @@
 import { LoadOptions } from '@rkesters/path-loader';
 import { URIComponents } from 'uri-js';
 
-export interface GeneralDocument {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [k: string]: any;
-}
+export type GeneralDocument = { [key: string]: DocumentNode };
+export type DocumentNode = string | number | boolean | null | DocumentNode[] | { [key: string]: DocumentNode };
 
 export type RefType = string; // 'remote' | 'local'
-export type RefLife = { $ref: string };
+export type RefLink = { $ref: string };
 export interface Metadata {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deps: Record<string, any>; // To avoid processing the same refernece twice, and for circular reference identification
-    docs: Record<string, GeneralDocument | Error>; // Cache to avoid processing the same document more than once
-    refs: Record<string, RefDetails>; // Reference locations and their metadata
+    docs: Record<string, GeneralDocument | DocumentNode[] | Error>; // Cache to avoid processing the same document more than once
+    refs: Record<string, ResolvedRefDetails>; // Reference locations and their metadata
 }
 export type RefPtr = string;
-export interface RefDetails {
-    def: GeneralDocument;
-    uri: string;
-    uriDetails: URIComponents;
-    type: string;
-    error: string;
-    warning: string;
-    missing: boolean;
-    circular: boolean;
-    value: GeneralDocument; // | string[];
-    refdId: string;
-    fqURI: string;
-}
+
 /**
  * The options used for various JsonRefs APIs.
  */
@@ -249,7 +235,7 @@ export type RefDetailsFilter = (refDetails: UnresolvedRefDetails, path: string[]
  * @param path - The path to the JSON Reference like object
  * @returns the processed JSON Reference like object
  */
-export type RefPreProcessor = (obj: object, path: string[]) => object;
+export type RefPreProcessor = (obj: RefLink, path: string[]) => GeneralDocument;
 
 /**
  * Simple function used to post-process a JSON Reference details.
@@ -262,33 +248,7 @@ export type RefPostProcessor = (
     refDetails: UnresolvedRefDetails,
     // eslint-disable-next-line no-unused-vars
     path: string[]
-) => object;
-
-/**
- * Detailed information about resolved JSON References.
- */
-export interface ResolvedRefDetails extends UnresolvedRefDetails {
-    /**
-     * Whether or not the JSON Reference is circular *(Will not be set if the JSON
-     * Reference is not circular)*
-     */
-    circular?: boolean;
-    /**
-     * The fully-qualified version of the `uri` property for
-     * {@link UnresolvedRefDetails} but with the value being relative to the root document
-     */
-    fqURI: string;
-    /**
-     * Whether or not the referenced value was missing or not *(Will not be set if the
-     * referenced value is not missing)*
-     */
-    missing?: boolean;
-    /**
-     * The referenced value *(Will not be set if the referenced value is missing)*
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    value?: any;
-}
+) => UnresolvedRefDetails;
 
 /**
  * The results of resolving the JSON References of an array/object.
@@ -296,13 +256,13 @@ export interface ResolvedRefDetails extends UnresolvedRefDetails {
 export interface ResolvedRefsResults {
     /**
      * An object whose keys are JSON Pointers *(fragment version)*
-     * to where the JSON Reference is defined and whose values are {@link ResolvedRefDetails}
+     * to where the JSON Reference is defined and whose values are {@link UnresolvedRefDetails}
      */
-    refs: Record<string, ResolvedRefDetails>;
+    refs: Record<string, UnresolvedRefDetails>;
     /**
      * The array/object with its JSON References fully resolved
      */
-    resolved: GeneralDocument;
+    resolved: Record<string, ResolvedRefDetails>;
 }
 
 /**
@@ -319,10 +279,10 @@ export interface RetrievedRefsResults extends ResolvedRefsResults {
  * An object containing the retrieved document, the document with its references resolved and  detailed information
  * about its JSON References.
  */
-export interface RetrievedResolvedRefsResults<T extends GeneralDocument = GeneralDocument> {
+export interface RetrievedResolvedRefsResults {
     /**
      * An object whose keys are JSON Pointers *(fragment version)*
-     * to where the JSON Reference is defined and whose values are {@link UnresolvedRefDetails}
+     * to where the JSON Reference is defined and whose values are {@link ResolvedRefDetails}
      */
     refs: Record<string, UnresolvedRefDetails>;
     /**
@@ -332,7 +292,7 @@ export interface RetrievedResolvedRefsResults<T extends GeneralDocument = Genera
     /**
      * The retrieved document
      */
-    value: T;
+    value: GeneralDocument;
 }
 
 /**
@@ -342,7 +302,7 @@ export interface UnresolvedRefDetails {
     /**
      * The JSON Reference definition
      */
-    def: object;
+    def: GeneralDocument;
     /**
      * The error information for invalid JSON Reference definition *(Only present when the
      * JSON Reference definition is invalid or there was a problem retrieving a remote reference during resolution)*
@@ -367,4 +327,31 @@ export interface UnresolvedRefDetails {
      * warning)*
      */
     warning?: string;
+
+    refdId?: string;
+}
+
+/**
+ * Detailed information about resolved JSON References.
+ */
+export interface ResolvedRefDetails extends UnresolvedRefDetails {
+    /**
+     * Whether or not the JSON Reference is circular *(Will not be set if the JSON
+     * Reference is not circular)*
+     */
+    circular?: boolean;
+    /**
+     * The fully-qualified version of the `uri` property for
+     * {@link UnresolvedRefDetails} but with the value being relative to the root document
+     */
+    fqURI: string;
+    /**
+     * Whether or not the referenced value was missing or not *(Will not be set if the
+     * referenced value is not missing)*
+     */
+    missing?: boolean;
+    /**
+     * The referenced value *(Will not be set if the referenced value is missing)*
+     */
+    value?: GeneralDocument;
 }
